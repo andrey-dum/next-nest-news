@@ -1,4 +1,5 @@
 import { IsEmail, Length, MinLength } from 'class-validator';
+import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class CreateUserDto {
 
@@ -10,5 +11,12 @@ export class CreateUserDto {
 
     @Length(6, 32, { message: "Minimum 6 characters" })
     password?: string;
+
+    
+    @CreateDateColumn({type: 'timestamp'})
+    createdAt: Date;
+
+    @UpdateDateColumn({type: 'timestamp'})
+    updatedAt: Date;
 
 }
