@@ -1,11 +1,9 @@
-
-
 export class CreatePostDto {
-    title: string;
+  title: string;
 
-    body: string;
+  body: string;
 
-    category: Array<string>;
+  category: Array<string>;
 
-    tags: string;
+  tags: string;
 }

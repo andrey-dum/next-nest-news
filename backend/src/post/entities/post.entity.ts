@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { IsEmail } from 'class-validator';
 
 @Entity('posts')
@@ -12,15 +18,18 @@ export class PostEntity {
   @Column()
   body: string;
 
+  @Column({ default: 0 })
+  views: number;
+
   @Column({ nullable: true })
   categoty?: string;
 
   @Column({ nullable: true })
   tags?: string;
 
-  @CreateDateColumn({type: 'timestamp'})
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({type: 'timestamp'})
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 }
