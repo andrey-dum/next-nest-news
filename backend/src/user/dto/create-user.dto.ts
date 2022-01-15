@@ -8,7 +8,7 @@ export class CreateUserDto {
   @IsEmail(undefined, { message: 'Неверная почта' })
   email: string;
 
-  @Length(6, 32, { message: 'Minimum 6 characters' })
+  @Length(6, 32, { message: 'Password Minimum 6 characters' })
   password?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
