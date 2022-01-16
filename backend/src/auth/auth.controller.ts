@@ -22,11 +22,11 @@ export class AuthController {
   }
 
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
 
   @Post('register')
   register(@Body() dto: CreateUserDto) {
