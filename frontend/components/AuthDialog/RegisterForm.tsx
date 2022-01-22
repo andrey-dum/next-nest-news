@@ -8,7 +8,9 @@ import { registerValidation } from '../../utils/schemas/registerValidation';
 import { useForm } from 'react-hook-form';
 import { UserApi } from '../../services/api';
 import { CreateUserDto } from '../../services/dto/user-dto';
-import { format } from 'path/posix';
+import { setCookie } from 'nookies';
+import { Alert } from '@material-ui/lab';
+
 
 const isEmpty = (data: any) => {
     let res = true;
@@ -61,17 +63,7 @@ interface IFormInputs {
 
 export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
 
-    // const [data, setData] = useState({
-    //     email: "",
-    //     password: ""
-    // })
-
-    // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setData({
-    //         ...data,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
+    const [errorMsg, setErrorMsg] = useState('');
 
     const { register, handleSubmit, formState, formState: { errors } } = useForm<IFormInputs>({
         mode: 'onChange',
@@ -81,9 +73,19 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
     const onSubmit = async (dto: CreateUserDto) => {
         try {
             const data = await UserApi.register(dto);
-            console.log(data)
-        } catch (error) {
-            console.warn('Ошибка при регистрации', error)
+            setCookie(null, 'token', data.access_token, {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/'
+            })
+            setErrorMsg(''); 
+        } catch (error: any) {
+            // console.warn('Ошибка при входе', error)
+            console.log(error)
+            if(error.response) {
+                
+                setErrorMsg(error.response.data.message);
+            }
+           
         }
     };
 
@@ -91,11 +93,14 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
   return (
     <StyledAuthForm >
 
-<       Box>
+        <Box>
             <Typography variant='h5'>Регистрация</Typography>
             <Box>Есть аккаунт? <Box className='registerBtn' onClick={() => handleShowForm(FormType.Auth)}>Войти</Box></Box>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
+
+            { errorMsg && <Alert severity="error">{errorMsg}</Alert> }
+
             <TextField 
                 placeholder='Name' 
                 label='Name'

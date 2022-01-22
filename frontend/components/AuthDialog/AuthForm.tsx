@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { Box, TextField, Typography } from '@material-ui/core';
 import { FormType } from './AuthDialog';
+import { setCookie } from 'nookies';
+import { LoginUserDto } from '../../services/dto/user-dto';
+import { UserApi } from '../../services/api';
+import Alert from '@material-ui/lab/Alert';
 
 
 const isEmpty = (data: any) => {
@@ -58,24 +62,32 @@ const StyledAuthForm = styled.div`
 
 export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
 
-    // const [data, setData] = useState({
-    //     email: "",
-    //     password: ""
-    // })
+    const [errorMsg, setErrorMsg] = useState('');
 
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
+
+    const { register, handleSubmit, formState, formState: { errors } } = useForm<IFormInputs>({
         mode: 'onChange',
         resolver: yupResolver(loginSchema)
       });
       
-    const onSubmit = (data: IFormInputs) => console.log(data);
-
-    // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setData({
-    //         ...data,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
+      const onSubmit = async (dto: LoginUserDto) => {
+        try {
+            const data = await UserApi.login(dto);
+            setCookie(null, 'token', data.access_token, {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/'
+            })
+            setErrorMsg(''); 
+        } catch (error: any) {
+            // console.warn('Ошибка при входе', error)
+            console.log(error)
+            if(error.response) {
+                
+                setErrorMsg(error.response.data.message);
+            }
+           
+        }
+    };
 
 
   return (
@@ -86,17 +98,19 @@ export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
             <Box>или <Box className='registerBtn' onClick={() => handleShowForm(FormType.Register)}>зарегистрироваться</Box></Box>
         </Box>
 
+        { errorMsg && <Alert severity="error">{errorMsg}</Alert> }
+
         <form onSubmit={handleSubmit(onSubmit)}>
             <TextField 
-                    placeholder='Email' 
-                    label='Email'
-                    // name="email" 
-                    // onChange={handleChange}
-                    fullWidth
-                    // required
-                    {...register("email")}
-                    helperText={errors.email?.message}
-                    error={!!errors.email?.message}
+                placeholder='Email' 
+                label='Email'
+                // name="email" 
+                // onChange={handleChange}
+                fullWidth
+                // required
+                {...register("email")}
+                helperText={errors.email?.message}
+                error={!!errors.email?.message}
                 />
                 <TextField
                     error={!!errors.password?.message}
@@ -110,7 +124,14 @@ export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
                     {...register("password")}
                     helperText={errors.password?.message}
                 />
-                <Button variant='contained' type='submit' color="primary">Войти</Button>
+                <Button 
+                    variant='contained' 
+                    type='submit' 
+                    color="primary"
+                    disabled={!formState.isValid || formState.isSubmitting}
+                    >
+                        Войти
+                </Button>
                 <Button onClick={() => handleShowForm(FormType.Main)} variant='text'>Назад</Button>
         
         </form>
