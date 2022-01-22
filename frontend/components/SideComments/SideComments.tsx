@@ -2,7 +2,6 @@ import { Typography } from '@material-ui/core';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import styled from 'styled-components';
 
 interface ISideCommnets {

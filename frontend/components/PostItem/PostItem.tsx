@@ -5,7 +5,7 @@ import { IPost } from '../../types/interfaces'
 import styled from 'styled-components';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import {Share} from '@material-ui/icons';
+import { Share } from '@material-ui/icons';
 
 interface IProps {
   post: IPost;

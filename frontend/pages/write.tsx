@@ -1,10 +1,9 @@
 import React from 'react';
-import { TextField } from '@material-ui/core';
+// import { TextField } from '@material-ui/core';
 import { NextPage } from 'next';
 
 import { CreatePostForm } from '../components/CreatePostForm/CreatePostForm';
 import { MainLayout } from '../layouts/MainLayout';
-
 
 interface IWritePageProps {
 

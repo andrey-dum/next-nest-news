@@ -52,8 +52,6 @@ const StyledHeader = styled.div`
     .spacer {
         margin: auto;
     }
-
-
 `;
 
 const user: IUser = {

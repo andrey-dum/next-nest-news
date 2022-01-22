@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react'
 import { MainLayout } from '../../layouts/MainLayout'
 
-
-
 interface Props {
     
 }

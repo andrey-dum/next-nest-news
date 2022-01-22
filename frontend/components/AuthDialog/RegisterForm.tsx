@@ -6,6 +6,9 @@ import { Box, TextField, Typography } from '@material-ui/core';
 import { FormType } from './AuthDialog';
 import { registerValidation } from '../../utils/schemas/registerValidation';
 import { useForm } from 'react-hook-form';
+import { UserApi } from '../../services/api';
+import { CreateUserDto } from '../../services/dto/user-dto';
+import { format } from 'path/posix';
 
 const isEmpty = (data: any) => {
     let res = true;
@@ -49,7 +52,7 @@ const StyledAuthForm = styled.div`
 
 
 interface IFormInputs {
-    fullname: string;
+    fullName: string;
     email: string
     password: number
 }
@@ -70,12 +73,19 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
     //     })
     // }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
+    const { register, handleSubmit, formState, formState: { errors } } = useForm<IFormInputs>({
         mode: 'onChange',
         resolver: yupResolver(registerValidation)
       });
       
-    const onSubmit = (data: IFormInputs) => console.log(data);
+    const onSubmit = async (dto: CreateUserDto) => {
+        try {
+            const data = await UserApi.register(dto);
+            console.log(data)
+        } catch (error) {
+            console.warn('Ошибка при регистрации', error)
+        }
+    };
 
 
   return (
@@ -90,9 +100,9 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
                 placeholder='Name' 
                 label='Name'
                 // name="name" 
-                {...register("fullname")}
-                helperText={errors.fullname?.message}
-                error={!!errors.fullname?.message}
+                {...register("fullName")}
+                helperText={errors.fullName?.message}
+                error={!!errors.fullName?.message}
                 fullWidth
             />
             <TextField 
@@ -115,10 +125,22 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
                 helperText={errors.password?.message}
                 error={!!errors.password?.message}
             />
+
+        <Button 
+            color="primary" 
+            variant='contained'
+            type='submit'
+            disabled={!formState.isValid || formState.isSubmitting}
+        
+        >
+            Регистрация
+        </Button>
+
+        <Button onClick={() => handleShowForm(FormType.Main)} variant='text'>Назад</Button>
+            
          </form>
        
-        <Button color="primary" variant='contained'>Регистрация</Button>
-        <Button onClick={() => handleShowForm(FormType.Main)} variant='text'>Назад</Button>
+        
         
     </StyledAuthForm>
   );

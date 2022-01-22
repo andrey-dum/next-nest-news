@@ -95,16 +95,12 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     <LeftMenu />
                 </div>
             }
-           
 
             <div className={`main`}>
                 <div className={`content ${flexColumn ? "flexColumn" : ''}`}>
                     {children}
                 </div>
-                
             </div>
-
-
 
             { !hideComments &&
                 <div className="rightSide">

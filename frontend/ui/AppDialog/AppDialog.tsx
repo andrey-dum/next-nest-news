@@ -22,7 +22,6 @@ export const AppDialog: React.FC<Props> = ({
   ...rest
 }) => {
 
-
   return (
       <Dialog 
         open={open} 
