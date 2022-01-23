@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsEmail } from 'class-validator';
+
 
 @Entity('posts')
 export class PostEntity {

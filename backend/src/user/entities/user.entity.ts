@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-// import { IsEmail } from 'class-validator';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -10,9 +9,14 @@ export class User {
   fullName: string;
 
   @Column({ unique: true })
-  // @IsEmail()
   email: string;
 
   @Column({ nullable: true })
   password?: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt?: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt?: Date;
 }

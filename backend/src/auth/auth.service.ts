@@ -32,18 +32,26 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const { password, ...userData } = user;
-    // const payload = { email: user.email, sub: user.id };
-    return {
-      ...userData,
-      access_token: this.generateJwtToken(userData),
-    };
+    try {
+      const { password, ...userData } = user;
+      // const payload = { email: user.email, sub: user.id };
+      return {
+        ...userData,
+        access_token: this.generateJwtToken(userData),
+      };
+    } catch (error) {
+      throw new ForbiddenException("Ошибка при входе")
+    }
   }
 
   async register(dto: CreateUserDto) {
 
     try {
-      const {password, ...userData } = await this.usersService.create(dto)
+      const {password, ...userData } = await this.usersService.create({
+        email: dto.email,
+        fullName: dto.fullName,
+        password: dto.password
+      })
 
       return {
         ...userData,

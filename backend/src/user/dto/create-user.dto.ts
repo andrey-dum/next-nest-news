@@ -14,9 +14,5 @@ export class CreateUserDto {
   @Length(6, 32, { message: 'Password Minimum 6 characters' })
   password?: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  
 }
