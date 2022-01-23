@@ -67,6 +67,8 @@ export const Header: React.FC = () => {
 
     const user = useAppSelector(selectUserData)
 
+    console.log(user)
+
     const followIcon = useMemo(
         () => user ? <AddOutlined /> : <CheckOutlined />
     , [user])

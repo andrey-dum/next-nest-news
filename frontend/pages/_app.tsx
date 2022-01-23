@@ -6,7 +6,7 @@ import theme from "../theme"
 import { Header } from '../components/Header'
 import Head from 'next/head'
 import { Provider } from 'react-redux';
-import { store } from '../redux/store';
+import { store, wrapper } from '../redux/store';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,10 +26,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           
-          <Provider store={store}>
             <Header />
             <Component {...pageProps} />
-          </Provider>
         </ThemeProvider>
       </MuiThemeProvider>
     </>
@@ -37,4 +35,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default wrapper.withRedux(MyApp)
