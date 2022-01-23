@@ -5,6 +5,8 @@ import { ThemeProvider } from 'styled-components';
 import theme from "../theme"
 import { Header } from '../components/Header'
 import Head from 'next/head'
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -23,8 +25,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Header />
-          <Component {...pageProps} />
+          
+          <Provider store={store}>
+            <Header />
+            <Component {...pageProps} />
+          </Provider>
         </ThemeProvider>
       </MuiThemeProvider>
     </>

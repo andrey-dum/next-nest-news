@@ -9,6 +9,8 @@ import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import { IUser } from '../../types/interfaces';
 import { AuthDialog } from '../AuthDialog/AuthDialog';
+import { selectUserData } from '../../redux/slices/userSlice';
+import { useAppSelector } from '../../redux/hooks';
 
 const StyledHeader = styled.div`
     background: ${props => props.theme.palette.primary.main};
@@ -61,15 +63,13 @@ const user: IUser = {
 
 
 export const Header: React.FC = () => {
-    const [login, setLogin] = useState(false);
+    // const [login, setLogin] = useState(false);
 
-    const onFollow = () => {
-        setLogin(!login)
-    }
+    const user = useAppSelector(selectUserData)
 
     const followIcon = useMemo(
-        () => login ? <AddOutlined /> : <CheckOutlined />
-    , [login])
+        () => user ? <AddOutlined /> : <CheckOutlined />
+    , [user])
 
     const [open, setOpen] = React.useState(false);
 
@@ -98,7 +98,9 @@ export const Header: React.FC = () => {
 
            <TextField variant="standard" placeholder="Поиск"/>
 
-            <Button variant="contained" onClick={onFollow}><Link href="/write">Новая запись</Link></Button>
+            { user 
+                &&  <Button variant="contained"><Link href="/write">Новая запись</Link></Button> }
+            
 
             <div className="spacer" />
 
@@ -108,7 +110,7 @@ export const Header: React.FC = () => {
                 >
                     <NotificationsNoneIcon />
                 </IconButton>
-                { !user ? 
+                { user ? 
                     <>
                         <IconButton aria-label="ChatBubbleOutlineIcon">
                             <ChatBubbleOutlineIcon />

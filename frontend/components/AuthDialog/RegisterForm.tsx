@@ -10,6 +10,8 @@ import { UserApi } from '../../services/api';
 import { CreateUserDto } from '../../services/dto/user-dto';
 import { setCookie } from 'nookies';
 import { Alert } from '@material-ui/lab';
+import { useAppDispatch } from '../../redux/hooks';
+import { setUser } from '../../redux/slices/userSlice';
 
 
 const isEmpty = (data: any) => {
@@ -64,6 +66,7 @@ interface IFormInputs {
 export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
 
     const [errorMsg, setErrorMsg] = useState('');
+    const dispatch = useAppDispatch()
 
     const { register, handleSubmit, formState, formState: { errors } } = useForm<IFormInputs>({
         mode: 'onChange',
@@ -73,6 +76,7 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
     const onSubmit = async (dto: CreateUserDto) => {
         try {
             const data = await UserApi.register(dto);
+            dispatch(setUser(data))
             setCookie(null, 'token', data.access_token, {
                 maxAge: 30 * 24 * 60 * 60,
                 path: '/'

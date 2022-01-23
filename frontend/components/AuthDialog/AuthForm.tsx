@@ -11,6 +11,8 @@ import { setCookie } from 'nookies';
 import { LoginUserDto } from '../../services/dto/user-dto';
 import { UserApi } from '../../services/api';
 import Alert from '@material-ui/lab/Alert';
+import { useAppDispatch } from '../../redux/hooks';
+import { setUser } from '../../redux/slices/userSlice';
 
 
 const isEmpty = (data: any) => {
@@ -64,6 +66,8 @@ export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
 
     const [errorMsg, setErrorMsg] = useState('');
 
+    const dispatch = useAppDispatch()
+
 
     const { register, handleSubmit, formState, formState: { errors } } = useForm<IFormInputs>({
         mode: 'onChange',
@@ -73,6 +77,7 @@ export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
       const onSubmit = async (dto: LoginUserDto) => {
         try {
             const data = await UserApi.login(dto);
+            dispatch(setUser(data))
             setCookie(null, 'token', data.access_token, {
                 maxAge: 30 * 24 * 60 * 60,
                 path: '/'
