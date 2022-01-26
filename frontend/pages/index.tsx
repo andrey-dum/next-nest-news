@@ -37,23 +37,23 @@ const Home: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
+// export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
   
-  try {
+//   try {
 
-    const {token} = parseCookies(ctx)
-    const user = await UserApi.getProfile(token)
+//     const {token} = parseCookies(ctx)
+//     const user = await UserApi.getProfile(token)
 
-    store.dispatch(setUser(user))
+//     store.dispatch(setUser(user))
 
-    return { props: {} }
+//     return { props: {} }
     
-  } catch (error) {
+//   } catch (error) {
 
-    console.log(error)
-    return { props: {} }
+//     console.log(error)
+//     return { props: {} }
 
-  }
-})
+//   }
+// })
 
 export default Home

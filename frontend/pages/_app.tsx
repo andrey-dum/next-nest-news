@@ -7,9 +7,12 @@ import { Header } from '../components/Header'
 import Head from 'next/head'
 import { Provider } from 'react-redux';
 import { store, wrapper } from '../redux/store';
+import { parseCookies } from 'nookies';
+import { UserApi } from '../services/api';
+import { setUser } from '../redux/slices/userSlice';
 
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
   
     <>
@@ -35,4 +38,25 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default wrapper.withRedux(MyApp)
+App.getInitialProps = wrapper.getInitialAppProps(store => async ({ctx, Component}) => {
+  try {
+
+    const {token} = parseCookies(ctx)
+    const user = await UserApi.getProfile(token)
+
+    store.dispatch(setUser(user))
+
+  } catch (error) {
+
+    console.log(error)
+    return { props: {} }
+  }
+
+  return { 
+    pageProps: {
+      ...(Component.getInitialProps ? await Component.getInitialProps({...ctx, store}) : {}),
+     },
+   }
+})
+
+export default wrapper.withRedux(App)
