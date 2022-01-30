@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 
 
-const EditorJs = dynamic(() => import('../Editor/Editor').then(m => m.Editor), { ssr: false })
+const EditorJs = dynamic((): Promise<any> => import('../Editor/Editor').then(m => m.Editor), { ssr: false })
 
 const StyledFormWrapper = styled.div`
   
@@ -27,15 +28,44 @@ const StyledFormWrapper = styled.div`
 
 export const CreatePostForm: React.FC = () => {
 
+    const [title, setTitle] = useState('');
+    const [blocks, setBlocks] = useState([]);
+
+    const handleChangeTitle = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTitle(e.target.value)
+    }
+
+    const handleChangeEditor = (blocksData: any) => {
+        console.log(blocksData)
+        setBlocks(blocksData)
+    }
+
+    const handleSubmit = () => {
+
+    }
+
+
     return (
         <StyledFormWrapper
         
         >
-            <TextField fullWidth placeholder="Заголовок" />
+            <TextField 
+                fullWidth 
+                placeholder="Заголовок"
+                value={title}
+                onChange={handleChangeTitle} 
+            />
 
-            <EditorJs />
+            <EditorJs
+                handleChange={(data: OutputBlockData) => handleChangeEditor(data)}
+            />
 
-            <Button variant="contained" color="primary">Опубликовать</Button>
+            <Button 
+                variant="contained" 
+                color="primary"
+            >
+                Опубликовать
+            </Button>
         </StyledFormWrapper>
     )
 }

@@ -1,30 +1,32 @@
 import axios from 'axios';
-import { CreateUserDto, LoginUserDto, UserResponse } from '../dto/user-dto';
+import { GetServerSidePropsContext, NextPageContext } from 'next';
+import Cookies, { parseCookies } from 'nookies';
+import { UserApi } from './user';
 
 const instance = axios.create({
     baseURL: "http://localhost:7777/",
     withCredentials: true
 })
 
+export type ApiRetrunType = {
+    user: ReturnType<typeof UserApi>;
+}
 
-export const UserApi = {
 
-    async register (dto: CreateUserDto) {
-        const { data } = await instance.post<CreateUserDto, { data: UserResponse }>('auth/register', dto);
-        return data;
-    },
+export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiRetrunType => {
+    const cookies = ctx ? Cookies.get(ctx) : parseCookies()
+    const token = cookies.token;
 
-    async login (dto: LoginUserDto) {
-        const { data } = await instance.post<LoginUserDto, { data: UserResponse }>('auth/login', dto);
-        return data;
-    },
+    const instance = axios.create({
+        baseURL: 'http://localhost:7777',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
 
-    async getProfile (token: string) {
-        const { data } = await instance.get<UserResponse>('users/profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        return data;
+    return {
+        user: UserApi(instance)
     }
+
+
 }

@@ -9,10 +9,11 @@ import { Box, TextField, Typography } from '@material-ui/core';
 import { FormType } from './AuthDialog';
 import { setCookie } from 'nookies';
 import { LoginUserDto } from '../../services/dto/user-dto';
-import { UserApi } from '../../services/api';
+import { UserApi } from '../../services/api/user';
 import Alert from '@material-ui/lab/Alert';
 import { useAppDispatch } from '../../redux/hooks';
 import { setUser } from '../../redux/slices/userSlice';
+import { Api } from '../../services/api';
 
 
 const isEmpty = (data: any) => {
@@ -76,7 +77,7 @@ export const AuthForm: React.FC<IProps> = ({handleShowForm}) => {
       
       const onSubmit = async (dto: LoginUserDto) => {
         try {
-            const data = await UserApi.login(dto);
+            const data = await Api().user.login(dto);
             dispatch(setUser(data))
             setCookie(null, 'token', data.access_token, {
                 maxAge: 30 * 24 * 60 * 60,

@@ -6,12 +6,13 @@ import { Box, TextField, Typography } from '@material-ui/core';
 import { FormType } from './AuthDialog';
 import { registerValidation } from '../../utils/schemas/registerValidation';
 import { useForm } from 'react-hook-form';
-import { UserApi } from '../../services/api';
+import { UserApi } from '../../services/api/user';
 import { CreateUserDto } from '../../services/dto/user-dto';
 import { setCookie } from 'nookies';
 import { Alert } from '@material-ui/lab';
 import { useAppDispatch } from '../../redux/hooks';
 import { setUser } from '../../redux/slices/userSlice';
+import { Api } from '../../services/api';
 
 
 const isEmpty = (data: any) => {
@@ -75,7 +76,7 @@ export const RegisterForm: React.FC<IProps> = ({handleShowForm}) => {
       
     const onSubmit = async (dto: CreateUserDto) => {
         try {
-            const data = await UserApi.register(dto);
+            const data = await Api().user.register(dto);
             dispatch(setUser(data))
             setCookie(null, 'token', data.access_token, {
                 maxAge: 30 * 24 * 60 * 60,

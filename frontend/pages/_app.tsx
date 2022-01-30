@@ -8,8 +8,9 @@ import Head from 'next/head'
 import { Provider } from 'react-redux';
 import { store, wrapper } from '../redux/store';
 import { parseCookies } from 'nookies';
-import { UserApi } from '../services/api';
+import { UserApi } from '../services/api/user';
 import { setUser } from '../redux/slices/userSlice';
+import { Api } from '../services/api';
 
 
 function App({ Component, pageProps }: AppProps) {
@@ -38,18 +39,26 @@ function App({ Component, pageProps }: AppProps) {
   )
 }
 
-App.getInitialProps = wrapper.getInitialAppProps(store => async ({ctx, Component}) => {
+App.getInitialProps = wrapper.getInitialAppProps(store => async ({ctx, Component}): Promise<any> => {
   try {
 
     const {token} = parseCookies(ctx)
-    const user = await UserApi.getProfile(token)
+    const user = await Api(ctx).user.getProfile()
+    // const user = await UserApi().getProfile(token)
 
     store.dispatch(setUser(user))
 
   } catch (error) {
 
+    if(ctx.asPath === '/write') {
+      ctx.res?.writeHead(302, {
+        Location: '/403'
+      })
+      ctx.res?.end()
+    }
+
     console.log(error)
-    return { props: {} }
+    // return { props: {} }
   }
 
   return { 

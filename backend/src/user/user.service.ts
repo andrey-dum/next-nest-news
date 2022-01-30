@@ -50,8 +50,9 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne(id);
+  async findOne(id: number) {
+    const {password, ...user} = await this.userRepository.findOne(id);
+    return user;
   }
 
   findUser(options: LoginUserDto) {

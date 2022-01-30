@@ -15,7 +15,12 @@ export class PostService {
   ) {}
 
   create(createPostDto: CreatePostDto) {
-    return this.postRepository.save(createPostDto);
+    return this.postRepository.save({
+      title: createPostDto.title,
+      body: createPostDto.body,
+      tags: createPostDto.tags,
+      category: createPostDto.category,
+    });
   }
 
   findAll() {

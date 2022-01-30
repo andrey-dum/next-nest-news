@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Avatar, Button, IconButton, TextField, Typography } from '@material-ui/core';
 import { AddOutlined, CheckOutlined, Menu } from '@material-ui/icons';
@@ -56,33 +56,37 @@ const StyledHeader = styled.div`
     }
 `;
 
-const user: IUser = {
-    fullname: "Andrey",
-    avatarUrl: ""
-}
+// const user: IUser = {
+//     fullname: "Andrey",
+//     avatarUrl: ""
+// }
 
 
 export const Header: React.FC = () => {
     // const [login, setLogin] = useState(false);
 
-    const user = useAppSelector(selectUserData)
-
-    console.log(user)
-
-    const followIcon = useMemo(
-        () => user ? <AddOutlined /> : <CheckOutlined />
-    , [user])
-
     const [open, setOpen] = React.useState(false);
 
-      const handleClickOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
-    
+    const user = useAppSelector(selectUserData)
+
+    useEffect(() => {
+        if(open && user ) {
+            setOpen(false)
+        }
+    }, [open, user])
+
+    // const followIcon = useMemo(
+    //     () => user ? <AddOutlined /> : <CheckOutlined />
+    // , [user])
+
+    const handleClickOpen = () => {
+    setOpen(true);
+    };
+
+    const handleClose = () => {
+    setOpen(false);
+    };
+
         
     return (
         <StyledHeader
