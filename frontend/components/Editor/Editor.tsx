@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
-import EditorJS, { OutputData } from '@editorjs/editorjs';
+import EditorJS, { OutputBlockData, OutputData } from '@editorjs/editorjs';
 
 interface EditorProps {
-    handleChange: (blocks: OutputData['blocks']) => void;
+    handleChange: (blocks: OutputBlockData<string, any>[]) => void;
+    initialBlocks: OutputBlockData[]
+
 }
 
-export const Editor: React.FC<EditorProps> = ({handleChange}) => {
+export const Editor: React.FC<EditorProps> = ({ handleChange, initialBlocks }) => {
 
     useEffect(() => {
         const editor = new EditorJS({
             holder: 'editor',
+            data: {
+                blocks: initialBlocks
+            },
             placeholder: "Введите текст",
             async onChange() {
                 const data = await editor.save();

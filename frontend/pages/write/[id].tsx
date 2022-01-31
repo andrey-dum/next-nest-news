@@ -5,18 +5,21 @@ import { CreatePostForm } from '../../components/CreatePostForm/CreatePostForm';
 import { MainLayout } from '../../layouts/MainLayout';
 import { ParsedUrlQuery } from 'querystring';
 import { Api } from '../../services/api';
+import { IPost } from '../../types/interfaces';
 
 interface IWritePageProps {
-
+    post: IPost
 }
 
-const WritePage: NextPage<IWritePageProps> = () => {
+const WritePage: NextPage<IWritePageProps> = ({ post }) => {
     return (
         <MainLayout 
             // contentFullWidth
             hideComments    
         >
-            <CreatePostForm />
+            <CreatePostForm
+                data={post}
+            />
         </MainLayout>
     )
 }

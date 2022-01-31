@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import { Api } from '../../services/api';
+import { IPost } from '../../types/interfaces';
+import { useRouter } from 'next/dist/client/router';
 
 
 const EditorJs = dynamic((): Promise<any> => import('../Editor/Editor').then(m => m.Editor), { ssr: false })
@@ -26,11 +28,17 @@ const StyledFormWrapper = styled.div`
     }
 `;
 
+interface IProps {
+    data?: IPost;
+}
 
-export const CreatePostForm: React.FC = () => {
 
-    const [title, setTitle] = useState('');
-    const [blocks, setBlocks] = useState([]);
+export const CreatePostForm: React.FC<IProps> = ({ data }) => {
+
+    const router = useRouter()
+
+    const [title, setTitle] = useState(data?.title || '');
+    const [blocks, setBlocks] = useState(data?.body || []);
     const [loading, setLoading] = useState(false);
 
     const handleChangeTitle = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -38,17 +46,26 @@ export const CreatePostForm: React.FC = () => {
     }
 
     const handleChangeEditor = (blocksData: any) => {
-        console.log(blocksData)
         setBlocks(blocksData)
     }
 
     const handleCreatePost = async () => {
         try {
             setLoading(true)
-            const post = await Api().post.create({
+
+            const postData = {
                 title,
                 body: blocks
-            })
+            }
+
+            if (!data) {
+                const post = await Api().post.create(postData)
+                await router.push(`/write/${post.id}`)
+            } else {
+                const post = await Api().post.update(data.id, postData)
+            }
+
+            
         } catch (error) {
             console.warn('Create post', error)
             setLoading(false)
@@ -70,16 +87,21 @@ export const CreatePostForm: React.FC = () => {
             />
 
             <EditorJs
+                initialBlocks={data?.body}
                 handleChange={(data: OutputBlockData) => handleChangeEditor(data)}
             />
 
             <Button 
-                disabled={loading}
+                disabled={
+                    loading || 
+                    !blocks.length ||
+                    !title
+                }
                 variant="contained" 
                 color="primary"
                 onClick={handleCreatePost}
             >
-                Опубликовать
+                { data ? 'Save' : 'Опубликовать'}
             </Button>
         </StyledFormWrapper>
     )

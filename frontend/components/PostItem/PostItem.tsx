@@ -36,8 +36,7 @@ const StyledCard = styled(Card)`
 
 export const PostItem: React.FC<IProps> = ({ post }) => {
 
-    // const firstParagraph = post.body.find(obj => obj.type === 'paragraph')?.data.text || '';
-    
+    const firstParagraph = post.body.find(obj => obj.type === 'paragraph')?.data.text || '';
 
     return (
           <StyledCard>
@@ -47,15 +46,17 @@ export const PostItem: React.FC<IProps> = ({ post }) => {
                  <h3 className="cardTitle"> <Link href={`/posts/${post.id}`}>{post.title}</Link></h3>
                 </>
               }
-              subheader="September 14, 2016"
+              subheader={<small>{post.createdAt}</small>}
             />
-            <CardMedia
-              image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGOfJEHAIvVjPI8TXLLrMgwXWZiPx0FkU3dBiBExfIDy-ISANxSh2ulIvA9f86y_yu-sU&usqp=CAU"
-              title={post.title}
-            />
+            { post.imageUrl && 
+              <CardMedia
+                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGOfJEHAIvVjPI8TXLLrMgwXWZiPx0FkU3dBiBExfIDy-ISANxSh2ulIvA9f86y_yu-sU&usqp=CAU"
+                title={post.title}
+              />
+            }
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
-                {/* {firstParagraph} */}
+                {firstParagraph}
               </Typography>
 {/* 
               {post.body.map(p => (

@@ -1,7 +1,11 @@
+import { GetServerSidePropsContext } from 'next'
+import { ParsedUrlQuery } from 'querystring'
 import React, { ReactElement } from 'react'
 import { PostComments } from '../../components/PostComments/PostComments'
 import { PostPage } from '../../components/PostPage/PostPage'
 import { MainLayout } from '../../layouts/MainLayout'
+import { Api } from '../../services/api'
+import { IPost } from '../../types/interfaces'
 
 const comments = [
     {
@@ -16,17 +20,43 @@ const comments = [
   ]
   
 
-interface Props {
-    
+interface IProps {
+  post: IPost
 }
 
-export default function Post({}: Props): ReactElement {
+export default function Post({ post }: IProps): ReactElement {
     return (
         <MainLayout flexColumn contentFullWidth>
-            <PostPage />
+            <PostPage 
+              post={post}
+            />
             
             <PostComments comments={comments} />
            
         </MainLayout>
     )
 }
+
+
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext<ParsedUrlQuery>) => {
+  try {
+      const id = ctx.params?.id;
+      const post = await Api(ctx).post.getOne(+id!);
+
+      return {
+          props: {
+              post
+          }
+      }
+
+  } catch (error) {
+      console.log('Post Page', error);
+      return {
+          props: {}, redirect: {
+              destination: '/',
+              permanent: false
+          }
+      }
+  }
+} 

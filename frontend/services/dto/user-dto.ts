@@ -14,5 +14,5 @@ export interface UserResponse {
     password?: string;
     createdAt: string;
     updatedAt: string;
-    access_token?: string;
+    access_token: string;
 }
