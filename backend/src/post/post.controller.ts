@@ -23,20 +23,20 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@UserDecorator() user: User, @Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  create(@UserDecorator() userId: number, @Body() createPostDto: CreatePostDto) {
+    return this.postService.create(createPostDto, userId);
   }
   
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(@UserDecorator() userId: number, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(+id, updatePostDto, userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  remove(@UserDecorator() userId: number, @Param('id') id: string) {
+    return this.postService.remove(+id, userId);
   }
 
   @Get()

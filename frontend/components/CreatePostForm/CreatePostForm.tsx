@@ -3,6 +3,7 @@ import { Button, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { OutputBlockData, OutputData } from '@editorjs/editorjs';
+import { Api } from '../../services/api';
 
 
 const EditorJs = dynamic((): Promise<any> => import('../Editor/Editor').then(m => m.Editor), { ssr: false })
@@ -30,6 +31,7 @@ export const CreatePostForm: React.FC = () => {
 
     const [title, setTitle] = useState('');
     const [blocks, setBlocks] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const handleChangeTitle = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
@@ -40,8 +42,19 @@ export const CreatePostForm: React.FC = () => {
         setBlocks(blocksData)
     }
 
-    const handleSubmit = () => {
-
+    const handleCreatePost = async () => {
+        try {
+            setLoading(true)
+            const post = await Api().post.create({
+                title,
+                body: blocks
+            })
+        } catch (error) {
+            console.warn('Create post', error)
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
     }
 
 
@@ -61,8 +74,10 @@ export const CreatePostForm: React.FC = () => {
             />
 
             <Button 
+                disabled={loading}
                 variant="contained" 
                 color="primary"
+                onClick={handleCreatePost}
             >
                 Опубликовать
             </Button>

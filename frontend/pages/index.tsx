@@ -2,30 +2,16 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { PostItem } from '../components/PostItem/PostItem'
 import { MainLayout } from '../layouts/MainLayout'
-import { wrapper } from '../redux/store'
-import { parseCookies } from 'nookies';
-import { UserApi } from '../services/api'
-import { setUser } from '../redux/slices/userSlice'
+import { Api } from '../services/api'
+import { IPost } from '../types/interfaces'
 
 
-const posts = [
-  {
-    id: 1,
-    title: 'Shrimp and Chorizo Paella 1',
-    text: `This impressive paella is a perfect party dish and a fun meal to cook together with your
-    guests. Add 1 cup of frozen peas along with the mussels, if you like.`,
-    author: 'author 1',
-  },
-  {
-    id: 2,
-    title: '2222222222222222',
-    text: `This impressive paella is a perfect party dish and a fun meal to cook together with your
-    guests. Add 1 cup of frozen peas along with the mussels, if you like.`,
-    author: 'author 2',
-  },
-]
+interface IProps {
+  posts: IPost[]
+}
 
-const Home: NextPage = () => {
+const Home: NextPage<IProps> = ({ posts }) => {
+
   return (
       <MainLayout flexColumn>
         { posts.map(post => (
@@ -37,23 +23,26 @@ const Home: NextPage = () => {
   )
 }
 
-// export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
-//   try {
+  try {
+    const posts = await Api().post.getPosts()
 
-//     const {token} = parseCookies(ctx)
-//     const user = await UserApi.getProfile(token)
+    // store.dispatch(setUser(user))
 
-//     store.dispatch(setUser(user))
-
-//     return { props: {} }
+    return { props: {
+        posts
+      } 
+    }
     
-//   } catch (error) {
+  } catch (error) {
 
-//     console.log(error)
-//     return { props: {} }
-
-//   }
-// })
+    console.log(error)
+    return { props: {
+      posts: null
+      } 
+    }
+  }
+}
 
 export default Home

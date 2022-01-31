@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { GetServerSidePropsContext, NextPageContext } from 'next';
 import Cookies, { parseCookies } from 'nookies';
+import { PostApi } from './post';
 import { UserApi } from './user';
 
-const instance = axios.create({
-    baseURL: "http://localhost:7777/",
-    withCredentials: true
-})
 
 export type ApiRetrunType = {
     user: ReturnType<typeof UserApi>;
+    post: ReturnType<typeof PostApi>;
 }
 
 
@@ -25,7 +23,9 @@ export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiRetru
     })
 
     return {
-        user: UserApi(instance)
+        user: UserApi(instance),
+        post: PostApi(instance),
+
     }
 
 

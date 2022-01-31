@@ -36,24 +36,33 @@ const StyledCard = styled(Card)`
 
 export const PostItem: React.FC<IProps> = ({ post }) => {
 
+    // const firstParagraph = post.body.find(obj => obj.type === 'paragraph')?.data.text || '';
+    
+
     return (
           <StyledCard>
             <CardHeader
               title={
                 <>
-                 <h3 className="cardTitle"> <Link href={`/posts/${post.title}`}>{post.title}</Link></h3>
+                 <h3 className="cardTitle"> <Link href={`/posts/${post.id}`}>{post.title}</Link></h3>
                 </>
               }
               subheader="September 14, 2016"
             />
             <CardMedia
               image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGOfJEHAIvVjPI8TXLLrMgwXWZiPx0FkU3dBiBExfIDy-ISANxSh2ulIvA9f86y_yu-sU&usqp=CAU"
-              title="Paella dish"
+              title={post.title}
             />
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
-                {post.text}
+                {/* {firstParagraph} */}
               </Typography>
+{/* 
+              {post.body.map(p => (
+                <Typography variant="body2" color="textSecondary" component="p">
+                {p.data.text}
+              </Typography>
+              ))} */}
             </CardContent>
             <CardActions disableSpacing>
               <IconButton aria-label="add to favorites">

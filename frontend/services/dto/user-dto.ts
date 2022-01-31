@@ -11,8 +11,8 @@ export interface UserResponse {
     fullName: string;
     email: string;
     id: number | string;
-    password: string;
+    password?: string;
     createdAt: string;
     updatedAt: string;
-    access_token: string;
+    access_token?: string;
 }
