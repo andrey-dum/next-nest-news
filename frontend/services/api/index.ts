@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GetServerSidePropsContext, NextPageContext } from 'next';
 import Cookies, { parseCookies } from 'nookies';
+import { CommentApi } from './commentApi';
 import { PostApi } from './post';
 import { UserApi } from './user';
 
@@ -8,6 +9,7 @@ import { UserApi } from './user';
 export type ApiRetrunType = {
     user: ReturnType<typeof UserApi>;
     post: ReturnType<typeof PostApi>;
+    comment: ReturnType<typeof CommentApi>;
 }
 
 
@@ -25,6 +27,7 @@ export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiRetru
     return {
         user: UserApi(instance),
         post: PostApi(instance),
+        comment: CommentApi(instance),
 
     }
 

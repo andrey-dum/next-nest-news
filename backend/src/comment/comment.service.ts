@@ -12,17 +12,34 @@ export class CommentService {
     private commentRepository: Repository<CommentEntity>
   ) {}
 
-  create(createCommentDto: CreateCommentDto) {
+  create(createCommentDto: CreateCommentDto, userId: number) {
     return this.commentRepository.save({
       text: createCommentDto.text,
       post: { id: createCommentDto.postId},
-      user: { id: 1 } // will be from cookie
+      user: { id: userId } 
 
     });
   }
 
-  findAll() {
-    return this.commentRepository.find();
+  async findAll(postId: number) {
+    // return this.commentRepository.find();
+    const qb = this.commentRepository
+    .createQueryBuilder('comment');
+
+    if(postId) {
+      qb.where('comment.postId = :postId', {  postId})
+    }
+
+      const result = await qb.leftJoinAndSelect('comment.post', 'post')
+      .leftJoinAndSelect('comment.user', 'user')
+      .getMany()
+
+      return result.map(obj => ({
+        ...obj,
+        post: {id: obj.post.id}
+      }))
+
+    // return await this.commentRepository.query('SELECT * FROM comments')
   }
 
   async findOne(id: number) {

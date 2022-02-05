@@ -6,6 +6,8 @@ import Tab from '@material-ui/core/Tab';
 import { CreateCommentForm } from '../CreateCommentForm/CreateCommentForm';
 import styled from 'styled-components';
 import { Divider } from '@material-ui/core';
+import { useAppSelector } from '../../redux/hooks';
+import { selectUserData } from '../../redux/slices/userSlice';
 
 interface IProps {
   comments: IComment[];
@@ -30,6 +32,8 @@ export const PostComments: React.FC<IProps> = ({comments}) => {
 
   const commentsCount = useMemo(() => comments.length || 0, [comments])
   const [value, setValue] = React.useState(0);
+
+  const user = useAppSelector(selectUserData)
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -58,7 +62,7 @@ export const PostComments: React.FC<IProps> = ({comments}) => {
 
           <div className="commnetsBody">
            
-            <CreateCommentForm />
+           {  !!user && <CreateCommentForm /> }
 
             { comments && comments.map(comment => (
               <Comment key={comment.id} comment={comment} />

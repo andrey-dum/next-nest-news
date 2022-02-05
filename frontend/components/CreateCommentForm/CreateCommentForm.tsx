@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import styled from 'styled-components';
+import { useRouter } from 'next/dist/client/router';
+import { Api } from '../../services/api';
 
 
 const StyledFormWrapper = styled.div`
@@ -31,6 +33,8 @@ export const CreateCommentForm: React.FC = () => {
     const [clicked, setClicked] = useState(false)
     const [text, setText] = useState('')
 
+    const { query: { id: postId } } = useRouter()
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
     }
@@ -40,10 +44,19 @@ export const CreateCommentForm: React.FC = () => {
     }
 
     const handleBlur = () => {
-        setClicked(false)
+        // setClicked(false)
     }
     
-    const onAddComment = () => {
+    const onAddComment = async () => {
+        try {
+            const comment = await Api().comment.create({
+                postId: Number(postId),
+                text
+            })
+            console.log(comment)
+        } catch (error) {
+            console.warn("Add commnet", error)
+        }
     }
 
     const rows = clicked ? 5 : 1;

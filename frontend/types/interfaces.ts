@@ -26,9 +26,10 @@ export interface IUserRespone {
 }
 
 export interface IComment {
-    id: string;
+    id: string | number;
     text: string;
-    author: IUser;
+    post?: IPost;
+    user?: UserResponse;
     createdAt?: string;
 }
 
