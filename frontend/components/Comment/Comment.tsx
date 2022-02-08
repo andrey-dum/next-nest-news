@@ -30,13 +30,13 @@ export const Comment: React.FC<IProps> = ({ comment }) => {
     return (
         <StyledComment className="comment">
             <div className="avatar">
-                <Avatar src={comment.author.avatarUrl}  />
+                <Avatar src={comment?.user?.avatarUrl} >{comment?.user?.fullName.slice(0,2).toUpperCase()}</Avatar>
             </div>
 
             
 
             <div className="authorInfo">
-                <div className="author">{comment.author.fullname}</div>
+                <div className="author">{comment?.user?.fullName}</div>
                 <div className="createdAt">
                     <small>{comment.createdAt}</small>
                 </div>

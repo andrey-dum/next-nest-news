@@ -10,6 +10,7 @@ export type CreateUserDto = {
 export interface UserResponse {
     fullName: string;
     email: string;
+    avatarUrl?: string;
     id: number | string;
     password?: string;
     createdAt: string;

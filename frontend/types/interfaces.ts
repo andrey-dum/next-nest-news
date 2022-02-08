@@ -10,13 +10,14 @@ import { OutputBlockData, OutputData } from "@editorjs/editorjs";
 import { UserResponse } from "../services/dto/user-dto";
 
 export interface IUser {
-    fullname: string;
+    fullName: string;
     avatarUrl?: string;
 }
 
 export interface IUserRespone {
-    fullname: string;
+    fullName: string;
     avatarUrl?: string;
+    
 
     id: number;
     email?: string;

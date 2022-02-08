@@ -8,9 +8,10 @@ import styled from 'styled-components';
 import { Divider } from '@material-ui/core';
 import { useAppSelector } from '../../redux/hooks';
 import { selectUserData } from '../../redux/slices/userSlice';
+import { Api } from '../../services/api';
 
 interface IProps {
-  comments: IComment[];
+  postId: number;
   sideComments?: boolean;
 }
 
@@ -28,10 +29,23 @@ const StyledPostComments = styled.div`
 
 `;
 
-export const PostComments: React.FC<IProps> = ({comments}) => {
+export const PostComments: React.FC<IProps> = ({postId}) => {
 
-  const commentsCount = useMemo(() => comments.length || 0, [comments])
+  // const commentsCount = useMemo(() => comments.length || 0, [comments])
   const [value, setValue] = React.useState(0);
+  const [comments, setComments] = React.useState([] as IComment[]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await Api().comment.getComments();
+        setComments(data)
+      } catch (error) {
+        console.warn('Fetch comments', error)
+      }
+    })();
+
+  }, [])
 
   const user = useAppSelector(selectUserData)
 
@@ -46,7 +60,7 @@ export const PostComments: React.FC<IProps> = ({comments}) => {
          
           
           <div className="commnetsHeader">
-            <h3>{ commentsCount } Комментария</h3>
+            {/* <h3>{ commentsCount } Комментария</h3> */}
             <Tabs
               value={value}
               indicatorColor="primary"

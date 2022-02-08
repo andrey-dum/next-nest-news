@@ -7,8 +7,6 @@ import { MainLayout } from '../../layouts/MainLayout'
 import { Api } from '../../services/api'
 import { IComment, IPost } from '../../types/interfaces'
 
-const comments = [] as IComment[]
-  
 
 interface IProps {
   post: IPost
@@ -22,7 +20,7 @@ export default function Post({ post }: IProps): ReactElement {
               post={post}
             />
             
-            <PostComments comments={comments} />
+            <PostComments postId={post.id} />
            
         </MainLayout>
     )
