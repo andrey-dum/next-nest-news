@@ -53,7 +53,11 @@ export const PostComments: React.FC<IProps> = ({postId}) => {
     setValue(newValue);
   };
 
+  const addComment = (obj: IComment) => {
+    setComments((prev) => [...prev, obj])
+  }
 
+  
 
     return (
         <StyledPostComments className="postComments">
@@ -76,10 +80,14 @@ export const PostComments: React.FC<IProps> = ({postId}) => {
 
           <div className="commnetsBody">
            
-           {  !!user && <CreateCommentForm /> }
+           {  !!user && <CreateCommentForm addComment={addComment} /> }
 
             { comments && comments.map(comment => (
-              <Comment key={comment.id} comment={comment} />
+              <Comment 
+                key={comment.id} 
+                comment={comment}
+                
+              />
             )) }
           </div>
          

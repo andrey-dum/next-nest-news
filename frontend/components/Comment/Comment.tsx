@@ -1,6 +1,7 @@
 import { Avatar } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { Api } from '../../services/api';
 import { IComment } from '../../types/interfaces';
 
 interface IProps {
@@ -27,6 +28,15 @@ const StyledComment = styled.div`
 
 export const Comment: React.FC<IProps> = ({ comment }) => {
 
+    const onRemove = async () => {
+        try {
+          await Api().comment.remove(+comment.id)
+        } catch (error) {
+          console.warn("Error delete comment", error)
+        }
+      }
+    
+
     return (
         <StyledComment className="comment">
             <div className="avatar">
@@ -41,6 +51,11 @@ export const Comment: React.FC<IProps> = ({ comment }) => {
                     <small>{comment.createdAt}</small>
                 </div>
                 <div className="text">{comment.text}</div>
+                <button
+                    onClick={onRemove}
+                >
+
+                </button>
             </div>
 
             

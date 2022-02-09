@@ -3,6 +3,7 @@ import { Button, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 import { Api } from '../../services/api';
+import { IComment } from '../../types/interfaces';
 
 
 const StyledFormWrapper = styled.div`
@@ -28,8 +29,11 @@ const StyledFormWrapper = styled.div`
     }
 `;
 
+interface IProps {
+    addComment: (obj: IComment) => void;
+}
 
-export const CreateCommentForm: React.FC = () => {
+export const CreateCommentForm: React.FC<IProps> = ({addComment}) => {
     const [clicked, setClicked] = useState(false)
     const [text, setText] = useState('')
 
@@ -53,7 +57,8 @@ export const CreateCommentForm: React.FC = () => {
                 postId: Number(postId),
                 text
             })
-            console.log(comment)
+            addComment(comment)
+          
         } catch (error) {
             console.warn("Add commnet", error)
         }
