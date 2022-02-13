@@ -38,7 +38,7 @@ export const PostComments: React.FC<IProps> = ({postId}) => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await Api().comment.getComments();
+        const data = await Api().comment.getComments(Number(postId));
         setComments(data)
       } catch (error) {
         console.warn('Fetch comments', error)
@@ -55,6 +55,10 @@ export const PostComments: React.FC<IProps> = ({postId}) => {
 
   const addComment = (obj: IComment) => {
     setComments((prev) => [...prev, obj])
+  }
+
+  const onRemoveComment = (id: number) => {
+    setComments((prev) => prev.filter(obj => obj.id !== id))
   }
 
   
@@ -86,6 +90,7 @@ export const PostComments: React.FC<IProps> = ({postId}) => {
               <Comment 
                 key={comment.id} 
                 comment={comment}
+                onRemoveComment={onRemoveComment}
                 
               />
             )) }

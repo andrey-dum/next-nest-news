@@ -24,6 +24,7 @@ export interface IUserRespone {
     password?: string;
     createdAt?: string;
     updatedAt?: string;
+    commentsCount?: string;
 }
 
 export interface IComment {

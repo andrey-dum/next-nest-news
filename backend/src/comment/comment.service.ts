@@ -36,7 +36,7 @@ export class CommentService {
 
       return result.map(obj => ({
         ...obj,
-        post: {id: obj.post.id}
+        post: {id: obj.post.id, title: obj.post.title}
       }))
 
     // return await this.commentRepository.query('SELECT * FROM comments')

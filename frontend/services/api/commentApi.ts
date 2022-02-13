@@ -11,8 +11,10 @@ export type CreateCommentDto = {
 
 export const CommentApi = (instance: AxiosInstance) => ({
 
-    async getComments () {
-        const { data } = await instance.get<IComment[]>('/comments');
+    async getComments (postId: number) {
+        const { data } = await instance.get<IComment[]>('/comments', { params: {
+            postId
+        } });
         return data;
     },
 

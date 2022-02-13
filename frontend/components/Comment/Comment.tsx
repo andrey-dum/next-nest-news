@@ -6,6 +6,7 @@ import { IComment } from '../../types/interfaces';
 
 interface IProps {
     comment: IComment;
+    onRemoveComment: (id: number) => void;
 }
 
 const StyledComment = styled.div`
@@ -26,11 +27,12 @@ const StyledComment = styled.div`
     }
 `;
 
-export const Comment: React.FC<IProps> = ({ comment }) => {
+export const Comment: React.FC<IProps> = ({ comment, onRemoveComment }) => {
 
     const onRemove = async () => {
         try {
           await Api().comment.remove(+comment.id)
+          onRemoveComment(+comment.id)
         } catch (error) {
           console.warn("Error delete comment", error)
         }
@@ -54,7 +56,7 @@ export const Comment: React.FC<IProps> = ({ comment }) => {
                 <button
                     onClick={onRemove}
                 >
-
+                    Delete
                 </button>
             </div>
 
